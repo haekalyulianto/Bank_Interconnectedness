@@ -1,5 +1,4 @@
 from pyvis.network import Network
-import IPython
 import networkx as nx
 import pandas as pd
 import numpy as np
@@ -49,11 +48,11 @@ def view_all(df):
     if not (int(df['BankPelapor'].iloc[i]) in graph.neighbors(int(df['BankTujuan'].iloc[i]))):
       graph.add_edge(int(df['BankPelapor'].iloc[i]), int(df['BankTujuan'].iloc[i]), weight = int(df['Jumlah Bulan Laporan'].iloc[i]))
   
-  nt = Network('500px', '500px', directed=True)
+  nt = Network('500px', '500px', directed=True, bgcolor='rgba(0,0,0,0)', font_color='#ffffff')
   nt.from_nx(graph)
   nt.show('graph_all.html')
 
-def view_data_from_bank_level(df, inputbankasal, n):
+def view_data_from_bank_level(df, inputbankasal, n, df2):
   def node_input(df0, bankasal, graph, x):
     if (x < n):
       for i in range (len(df0)):
@@ -68,6 +67,8 @@ def view_data_from_bank_level(df, inputbankasal, n):
 
     return graph
 
+  inputbankasal = df2.loc[df2['Nama Bank'] == inputbankasal]['Sandi Bank'].iloc[0]
+
   graph = nx.Graph()
   graph.add_node(int(inputbankasal), label=str(inputbankasal))
 
@@ -75,7 +76,7 @@ def view_data_from_bank_level(df, inputbankasal, n):
   
   graph = node_input(df1, inputbankasal, graph, 0)
 
-  nt = Network('500px', '500px', directed=True)
+  nt = Network('500px', '500px', directed=True, bgcolor='rgba(0,0,0,0)', font_color='#ffffff')
   nt.from_nx(graph)
   nt.show('graph_bank_level.html')
 
@@ -232,7 +233,7 @@ def view_data_cycle_all(df, cycle_num, cycle_len, df2):
       pos_bank = find_bank(df, list_cycle[i][len(list_cycle[i])-1])
       cycle_graph.add_edge(str(list_cycle[i][len(list_cycle[i])-1]) + '.' + str(i), str(list_cycle[i][0]) + '.' + str(i), value = int(df['Jumlah Bulan Laporan'].iloc[pos_bank]), title=str(df['Jumlah Bulan Laporan'].iloc[pos_bank]))
 
-  nt = Network('500px', '500px', directed=True)
+  nt = Network('500px', '500px', directed=True, bgcolor='rgba(0,0,0,0)', font_color='#ffffff')
   nt.from_nx(cycle_graph)
   nt.show('graph_cycle.html')
 
