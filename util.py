@@ -3,8 +3,14 @@ import networkx as nx
 import pandas as pd
 import numpy as np
 from collections import defaultdict
+import locale
 import warnings
 warnings.simplefilter(action='ignore')
+
+def rupiah(num):
+  locale.setlocale(locale.LC_NUMERIC, 'IND')
+  rupiah = locale.format("%.*f", (2, num), True)
+  return "Rp{}".format(rupiah)
 
 def inputo(df1, df2):
   #df1 = Data Penempatan Dana
@@ -65,7 +71,7 @@ def view_data_from_bank_level(df, inputbankasal, n, df2):
         if not int(df0['BankPelapor'].iloc[i]) in graph:
           graph.add_node(int(df0['BankPelapor'].iloc[i]), label=str(df0['BankPelapor'].iloc[i]), title=get_label(df2, int(df0['BankPelapor'].iloc[i])))
         
-        graph.add_edge(int(df0['BankPelapor'].iloc[i]), int(df0['BankTujuan'].iloc[i]), value=int(df0['Jumlah Bulan Laporan'].iloc[i]), title=str(df0['Jumlah Bulan Laporan'].iloc[i]))
+        graph.add_edge(int(df0['BankPelapor'].iloc[i]), int(df0['BankTujuan'].iloc[i]), value=int(df0['Jumlah Bulan Laporan'].iloc[i]), title=rupiah(df0['Jumlah Bulan Laporan'].iloc[i]))
         df1 = df[(df['BankPelapor'] == df0['BankTujuan'].iloc[i])]
         graph = node_input(df1, df2, graph, x+1)
 
@@ -76,6 +82,7 @@ def view_data_from_bank_level(df, inputbankasal, n, df2):
   df1 = df[(df['BankPelapor'] == inputbankasal)]
   
   graph = nx.Graph()
+  graph.add_node(int(inputbankasal), label=str(inputbankasal), title=get_label(df2, inputbankasal))
   graph = node_input(df1, df2, graph, 0)
 
   nt = Network('500px', '500px', directed=True, bgcolor='rgba(0,0,0,0)', font_color='#ffffff')
@@ -202,7 +209,7 @@ def view_data_cycle_all(df, cycle_num, cycle_len, df2):
     if not int(df['BankPelapor'].iloc[i]) in graph:
       graph.add_node(int(df['BankPelapor'].iloc[i]), label=str(df['BankPelapor'].iloc[i]))
     if not (int(df['BankPelapor'].iloc[i]) in graph.neighbors(int(df['BankTujuan'].iloc[i]))):
-      graph.add_edge(int(df['BankPelapor'].iloc[i]), int(df['BankTujuan'].iloc[i]), weight = int(df['Jumlah Bulan Laporan'].iloc[i]))
+      graph.add_edge(int(df['BankPelapor'].iloc[i]), int(df['BankTujuan'].iloc[i]), weight=int(df['Jumlah Bulan Laporan'].iloc[i]))
 
   list_cycle = list(simple_cycles(graph, cycle_num, cycle_len))
 
@@ -230,10 +237,10 @@ def view_data_cycle_all(df, cycle_num, cycle_len, df2):
       cycle_graph.add_node(str(list_cycle[i][j]) + '.' + str(i), group=str(i), label=str(list_cycle[i][j]), title=get_label(df2, int(list_cycle[i][j])))
       if not (cycle_graph.has_edge(str(list_cycle[i][j-1]) + '.' + str(i), str(list_cycle[i][j]) + '.' + str(i))):
         pos_bank = find_bank(df, list_cycle[i][j-1])
-        cycle_graph.add_edge(str(list_cycle[i][j-1]) + '.' + str(i), str(list_cycle[i][j]) + '.' + str(i), value = int(df['Jumlah Bulan Laporan'].iloc[pos_bank]), title=str(df['Jumlah Bulan Laporan'].iloc[pos_bank]))
+        cycle_graph.add_edge(str(list_cycle[i][j-1]) + '.' + str(i), str(list_cycle[i][j]) + '.' + str(i), value = int(df['Jumlah Bulan Laporan'].iloc[pos_bank]), title=rupiah(df['Jumlah Bulan Laporan'].iloc[pos_bank]))
     if not (cycle_graph.has_edge(str(list_cycle[i][len(list_cycle[i])-1]) + '.' + str(i), str(list_cycle[i][0]) + '.' + str(i))):
       pos_bank = find_bank(df, list_cycle[i][len(list_cycle[i])-1])
-      cycle_graph.add_edge(str(list_cycle[i][len(list_cycle[i])-1]) + '.' + str(i), str(list_cycle[i][0]) + '.' + str(i), value = int(df['Jumlah Bulan Laporan'].iloc[pos_bank]), title=str(df['Jumlah Bulan Laporan'].iloc[pos_bank]))
+      cycle_graph.add_edge(str(list_cycle[i][len(list_cycle[i])-1]) + '.' + str(i), str(list_cycle[i][0]) + '.' + str(i), value = int(df['Jumlah Bulan Laporan'].iloc[pos_bank]), title=rupiah(df['Jumlah Bulan Laporan'].iloc[pos_bank]))
 
   nt = Network('500px', '500px', directed=True, bgcolor='rgba(0,0,0,0)', font_color='#ffffff')
   nt.from_nx(cycle_graph)

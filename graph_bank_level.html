@@ -1,0 +1,108 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vis-network@latest/styles/vis-network.css" type="text/css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vis-network@latest/dist/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 500px;
+            height: 500px;
+            background-color: rgba(0,0,0,0);
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"font": {"color": "#ffffff"}, "id": 95, "label": "95", "shape": "dot", "size": 10, "title": "PT Bank JTrust Indonesia Tbk"}, {"font": {"color": "#ffffff"}, "id": 164, "label": "164", "shape": "dot", "size": 10, "title": "PT Bank ICBC Indonesia"}, {"font": {"color": "#ffffff"}, "id": 22, "label": "22", "shape": "dot", "size": 10, "title": "PT Bank CIMB Niaga Tbk."}, {"font": {"color": "#ffffff"}, "id": 54, "label": "54", "shape": "dot", "size": 10, "title": "PT Bank Capital Indonesia, Tbk."}, {"font": {"color": "#ffffff"}, "id": 16, "label": "16", "shape": "dot", "size": 10, "title": "PT Bank Maybank Indonesia Tbk"}, {"font": {"color": "#ffffff"}, "id": 8, "label": "8", "shape": "dot", "size": 10, "title": "PT Bank Mandiri (Persero) Tbk."}, {"font": {"color": "#ffffff"}, "id": 13, "label": "13", "shape": "dot", "size": 10, "title": "PT Bank Permata Tbk"}, {"font": {"color": "#ffffff"}, "id": 9, "label": "9", "shape": "dot", "size": 10, "title": "PT Bank Negara Indonesia (Persero) Tbk."}, {"font": {"color": "#ffffff"}, "id": 14, "label": "14", "shape": "dot", "size": 10, "title": "PT Bank Central Asia Tbk."}]);
+        edges = new vis.DataSet([{"arrows": "to", "from": 95, "label": 1, "title": "Rp134.532.662,00", "to": 164, "value": 134532662, "weight": 1}, {"arrows": "to", "from": 95, "label": 1, "title": "Rp61.070.070.931,00", "to": 22, "value": 61070070931, "weight": 1}, {"arrows": "to", "from": 95, "label": 1, "title": "Rp21.553.500.000,00", "to": 54, "value": 21553500000, "weight": 1}, {"arrows": "to", "from": 95, "label": 1, "title": "Rp22.051.866.780,00", "to": 16, "value": 22051866780, "weight": 1}, {"arrows": "to", "from": 95, "label": 1, "title": "Rp23.335.405.519,00", "to": 8, "value": 23335405519, "weight": 1}, {"arrows": "to", "from": 95, "label": 1, "title": "Rp14.561.987.885,00", "to": 13, "value": 14561987885, "weight": 1}, {"arrows": "to", "from": 95, "label": 1, "title": "Rp5.879.919.941,00", "to": 9, "value": 5879919941, "weight": 1}, {"arrows": "to", "from": 95, "label": 1, "title": "Rp160.943.348.302,00", "to": 14, "value": 160943348302, "weight": 1}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>

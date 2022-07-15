@@ -1,0 +1,108 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vis-network@latest/styles/vis-network.css" type="text/css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vis-network@latest/dist/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 500px;
+            height: 500px;
+            background-color: rgba(0,0,0,0);
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"font": {"color": "#ffffff"}, "group": "0", "id": "513.0", "label": "513", "shape": "dot", "size": 10, "title": "PT Bank Ina Perdana Tbk"}, {"font": {"color": "#ffffff"}, "group": "0", "id": "8.0", "label": "8", "shape": "dot", "size": 10, "title": "PT Bank Mandiri (Persero) Tbk."}, {"font": {"color": "#ffffff"}, "group": "0", "id": "22.0", "label": "22", "shape": "dot", "size": 10, "title": "PT Bank CIMB Niaga Tbk."}, {"font": {"color": "#ffffff"}, "group": "0", "id": "14.0", "label": "14", "shape": "dot", "size": 10, "title": "PT Bank Central Asia Tbk."}, {"font": {"color": "#ffffff"}, "group": "1", "id": "513.1", "label": "513", "shape": "dot", "size": 10, "title": "PT Bank Ina Perdana Tbk"}, {"font": {"color": "#ffffff"}, "group": "1", "id": "113.1", "label": "113", "shape": "dot", "size": 10, "title": "PT Bank Pembangunan Daerah Jawa Tengah"}, {"font": {"color": "#ffffff"}, "group": "1", "id": "16.1", "label": "16", "shape": "dot", "size": 10, "title": "PT Bank Maybank Indonesia Tbk"}, {"font": {"color": "#ffffff"}, "group": "1", "id": "22.1", "label": "22", "shape": "dot", "size": 10, "title": "PT Bank CIMB Niaga Tbk."}, {"font": {"color": "#ffffff"}, "group": "1", "id": "14.1", "label": "14", "shape": "dot", "size": 10, "title": "PT Bank Central Asia Tbk."}, {"font": {"color": "#ffffff"}, "group": "2", "id": "513.2", "label": "513", "shape": "dot", "size": 10, "title": "PT Bank Ina Perdana Tbk"}, {"font": {"color": "#ffffff"}, "group": "2", "id": "111.2", "label": "111", "shape": "dot", "size": 10, "title": "PT Bank DKI"}, {"font": {"color": "#ffffff"}, "group": "2", "id": "16.2", "label": "16", "shape": "dot", "size": 10, "title": "PT Bank Maybank Indonesia Tbk"}, {"font": {"color": "#ffffff"}, "group": "2", "id": "22.2", "label": "22", "shape": "dot", "size": 10, "title": "PT Bank CIMB Niaga Tbk."}, {"font": {"color": "#ffffff"}, "group": "2", "id": "14.2", "label": "14", "shape": "dot", "size": 10, "title": "PT Bank Central Asia Tbk."}, {"font": {"color": "#ffffff"}, "group": "3", "id": "513.3", "label": "513", "shape": "dot", "size": 10, "title": "PT Bank Ina Perdana Tbk"}, {"font": {"color": "#ffffff"}, "group": "3", "id": "111.3", "label": "111", "shape": "dot", "size": 10, "title": "PT Bank DKI"}, {"font": {"color": "#ffffff"}, "group": "3", "id": "8.3", "label": "8", "shape": "dot", "size": 10, "title": "PT Bank Mandiri (Persero) Tbk."}, {"font": {"color": "#ffffff"}, "group": "3", "id": "22.3", "label": "22", "shape": "dot", "size": 10, "title": "PT Bank CIMB Niaga Tbk."}, {"font": {"color": "#ffffff"}, "group": "3", "id": "14.3", "label": "14", "shape": "dot", "size": 10, "title": "PT Bank Central Asia Tbk."}, {"font": {"color": "#ffffff"}, "group": "4", "id": "513.4", "label": "513", "shape": "dot", "size": 10, "title": "PT Bank Ina Perdana Tbk"}, {"font": {"color": "#ffffff"}, "group": "4", "id": "110.4", "label": "110", "shape": "dot", "size": 10, "title": "PT Bank Pembangunan Daerah Jawa Barat dan Banten Tbk"}, {"font": {"color": "#ffffff"}, "group": "4", "id": "22.4", "label": "22", "shape": "dot", "size": 10, "title": "PT Bank CIMB Niaga Tbk."}, {"font": {"color": "#ffffff"}, "group": "4", "id": "14.4", "label": "14", "shape": "dot", "size": 10, "title": "PT Bank Central Asia Tbk."}, {"font": {"color": "#ffffff"}, "group": "5", "id": "9.5", "label": "9", "shape": "dot", "size": 10, "title": "PT Bank Negara Indonesia (Persero) Tbk."}, {"font": {"color": "#ffffff"}, "group": "5", "id": "114.5", "label": "114", "shape": "dot", "size": 10, "title": "PT Bank Pembangunan Daerah Jawa Timur, Tbk."}, {"font": {"color": "#ffffff"}, "group": "5", "id": "124.5", "label": "124", "shape": "dot", "size": 10, "title": "PT Bank Pembangunan Daerah Kalimantan Timur dan Kalimantan Utara"}, {"font": {"color": "#ffffff"}, "group": "5", "id": "46.5", "label": "46", "shape": "dot", "size": 10, "title": "PT Bank DBS Indonesia"}, {"font": {"color": "#ffffff"}, "group": "6", "id": "9.6", "label": "9", "shape": "dot", "size": 10, "title": "PT Bank Negara Indonesia (Persero) Tbk."}, {"font": {"color": "#ffffff"}, "group": "6", "id": "114.6", "label": "114", "shape": "dot", "size": 10, "title": "PT Bank Pembangunan Daerah Jawa Timur, Tbk."}, {"font": {"color": "#ffffff"}, "group": "6", "id": "124.6", "label": "124", "shape": "dot", "size": 10, "title": "PT Bank Pembangunan Daerah Kalimantan Timur dan Kalimantan Utara"}, {"font": {"color": "#ffffff"}, "group": "6", "id": "11.6", "label": "11", "shape": "dot", "size": 10, "title": "PT Bank Danamon Indonesia Tbk."}, {"font": {"color": "#ffffff"}, "group": "6", "id": "19.6", "label": "19", "shape": "dot", "size": 10, "title": "PT Pan Indonesia Bank, Tbk."}, {"font": {"color": "#ffffff"}, "group": "7", "id": "129.7", "label": "129", "shape": "dot", "size": 10, "title": "PT Bank Pembangunan Daerah Bali"}, {"font": {"color": "#ffffff"}, "group": "7", "id": "16.7", "label": "16", "shape": "dot", "size": 10, "title": "PT Bank Maybank Indonesia Tbk"}, {"font": {"color": "#ffffff"}, "group": "7", "id": "22.7", "label": "22", "shape": "dot", "size": 10, "title": "PT Bank CIMB Niaga Tbk."}, {"font": {"color": "#ffffff"}, "group": "7", "id": "14.7", "label": "14", "shape": "dot", "size": 10, "title": "PT Bank Central Asia Tbk."}, {"font": {"color": "#ffffff"}, "group": "8", "id": "129.8", "label": "129", "shape": "dot", "size": 10, "title": "PT Bank Pembangunan Daerah Bali"}, {"font": {"color": "#ffffff"}, "group": "8", "id": "111.8", "label": "111", "shape": "dot", "size": 10, "title": "PT Bank DKI"}, {"font": {"color": "#ffffff"}, "group": "8", "id": "16.8", "label": "16", "shape": "dot", "size": 10, "title": "PT Bank Maybank Indonesia Tbk"}, {"font": {"color": "#ffffff"}, "group": "8", "id": "22.8", "label": "22", "shape": "dot", "size": 10, "title": "PT Bank CIMB Niaga Tbk."}, {"font": {"color": "#ffffff"}, "group": "8", "id": "14.8", "label": "14", "shape": "dot", "size": 10, "title": "PT Bank Central Asia Tbk."}, {"font": {"color": "#ffffff"}, "group": "9", "id": "129.9", "label": "129", "shape": "dot", "size": 10, "title": "PT Bank Pembangunan Daerah Bali"}, {"font": {"color": "#ffffff"}, "group": "9", "id": "113.9", "label": "113", "shape": "dot", "size": 10, "title": "PT Bank Pembangunan Daerah Jawa Tengah"}, {"font": {"color": "#ffffff"}, "group": "9", "id": "16.9", "label": "16", "shape": "dot", "size": 10, "title": "PT Bank Maybank Indonesia Tbk"}, {"font": {"color": "#ffffff"}, "group": "9", "id": "22.9", "label": "22", "shape": "dot", "size": 10, "title": "PT Bank CIMB Niaga Tbk."}, {"font": {"color": "#ffffff"}, "group": "9", "id": "14.9", "label": "14", "shape": "dot", "size": 10, "title": "PT Bank Central Asia Tbk."}]);
+        edges = new vis.DataSet([{"arrows": "to", "from": "513.0", "label": 1, "title": "Rp251.561.761,00", "to": "8.0", "value": 251561761, "weight": 1}, {"arrows": "to", "from": "8.0", "label": 1, "title": "Rp1.000.000,00", "to": "22.0", "value": 1000000, "weight": 1}, {"arrows": "to", "from": "22.0", "label": 1, "title": "Rp6.660.965.751,00", "to": "14.0", "value": 6660965751, "weight": 1}, {"arrows": "to", "from": "14.0", "label": 1, "title": "Rp500.000.000.000,00", "to": "513.0", "value": 500000000000, "weight": 1}, {"arrows": "to", "from": "513.1", "label": 1, "title": "Rp251.561.761,00", "to": "113.1", "value": 251561761, "weight": 1}, {"arrows": "to", "from": "113.1", "label": 1, "title": "Rp104.190.000,00", "to": "16.1", "value": 104190000, "weight": 1}, {"arrows": "to", "from": "16.1", "label": 1, "title": "Rp750.000,00", "to": "22.1", "value": 750000, "weight": 1}, {"arrows": "to", "from": "22.1", "label": 1, "title": "Rp6.660.965.751,00", "to": "14.1", "value": 6660965751, "weight": 1}, {"arrows": "to", "from": "14.1", "label": 1, "title": "Rp500.000.000.000,00", "to": "513.1", "value": 500000000000, "weight": 1}, {"arrows": "to", "from": "513.2", "label": 1, "title": "Rp251.561.761,00", "to": "111.2", "value": 251561761, "weight": 1}, {"arrows": "to", "from": "111.2", "label": 1, "title": "Rp756.270.671,00", "to": "16.2", "value": 756270671, "weight": 1}, {"arrows": "to", "from": "16.2", "label": 1, "title": "Rp750.000,00", "to": "22.2", "value": 750000, "weight": 1}, {"arrows": "to", "from": "22.2", "label": 1, "title": "Rp6.660.965.751,00", "to": "14.2", "value": 6660965751, "weight": 1}, {"arrows": "to", "from": "14.2", "label": 1, "title": "Rp500.000.000.000,00", "to": "513.2", "value": 500000000000, "weight": 1}, {"arrows": "to", "from": "513.3", "label": 1, "title": "Rp251.561.761,00", "to": "111.3", "value": 251561761, "weight": 1}, {"arrows": "to", "from": "111.3", "label": 1, "title": "Rp756.270.671,00", "to": "8.3", "value": 756270671, "weight": 1}, {"arrows": "to", "from": "8.3", "label": 1, "title": "Rp1.000.000,00", "to": "22.3", "value": 1000000, "weight": 1}, {"arrows": "to", "from": "22.3", "label": 1, "title": "Rp6.660.965.751,00", "to": "14.3", "value": 6660965751, "weight": 1}, {"arrows": "to", "from": "14.3", "label": 1, "title": "Rp500.000.000.000,00", "to": "513.3", "value": 500000000000, "weight": 1}, {"arrows": "to", "from": "513.4", "label": 1, "title": "Rp251.561.761,00", "to": "110.4", "value": 251561761, "weight": 1}, {"arrows": "to", "from": "110.4", "label": 1, "title": "Rp1.000.000,00", "to": "22.4", "value": 1000000, "weight": 1}, {"arrows": "to", "from": "22.4", "label": 1, "title": "Rp6.660.965.751,00", "to": "14.4", "value": 6660965751, "weight": 1}, {"arrows": "to", "from": "14.4", "label": 1, "title": "Rp500.000.000.000,00", "to": "513.4", "value": 500000000000, "weight": 1}, {"arrows": "to", "from": "9.5", "label": 1, "title": "Rp1.292.488,00", "to": "114.5", "value": 1292488, "weight": 1}, {"arrows": "to", "from": "114.5", "label": 1, "title": "Rp189.000.000.000,00", "to": "124.5", "value": 189000000000, "weight": 1}, {"arrows": "to", "from": "124.5", "label": 1, "title": "Rp32.930.904,00", "to": "46.5", "value": 32930904, "weight": 1}, {"arrows": "to", "from": "46.5", "label": 1, "title": "Rp250.797.405.068,00", "to": "9.5", "value": 250797405068, "weight": 1}, {"arrows": "to", "from": "9.6", "label": 1, "title": "Rp1.292.488,00", "to": "114.6", "value": 1292488, "weight": 1}, {"arrows": "to", "from": "114.6", "label": 1, "title": "Rp189.000.000.000,00", "to": "124.6", "value": 189000000000, "weight": 1}, {"arrows": "to", "from": "124.6", "label": 1, "title": "Rp32.930.904,00", "to": "11.6", "value": 32930904, "weight": 1}, {"arrows": "to", "from": "11.6", "label": 1, "title": "Rp8.038.089,00", "to": "19.6", "value": 8038089, "weight": 1}, {"arrows": "to", "from": "19.6", "label": 1, "title": "Rp71.845.103.196,00", "to": "9.6", "value": 71845103196, "weight": 1}, {"arrows": "to", "from": "129.7", "label": 1, "title": "Rp9.517.847,00", "to": "16.7", "value": 9517847, "weight": 1}, {"arrows": "to", "from": "16.7", "label": 1, "title": "Rp750.000,00", "to": "22.7", "value": 750000, "weight": 1}, {"arrows": "to", "from": "22.7", "label": 1, "title": "Rp6.660.965.751,00", "to": "14.7", "value": 6660965751, "weight": 1}, {"arrows": "to", "from": "14.7", "label": 1, "title": "Rp500.000.000.000,00", "to": "129.7", "value": 500000000000, "weight": 1}, {"arrows": "to", "from": "129.8", "label": 1, "title": "Rp9.517.847,00", "to": "111.8", "value": 9517847, "weight": 1}, {"arrows": "to", "from": "111.8", "label": 1, "title": "Rp756.270.671,00", "to": "16.8", "value": 756270671, "weight": 1}, {"arrows": "to", "from": "16.8", "label": 1, "title": "Rp750.000,00", "to": "22.8", "value": 750000, "weight": 1}, {"arrows": "to", "from": "22.8", "label": 1, "title": "Rp6.660.965.751,00", "to": "14.8", "value": 6660965751, "weight": 1}, {"arrows": "to", "from": "14.8", "label": 1, "title": "Rp500.000.000.000,00", "to": "129.8", "value": 500000000000, "weight": 1}, {"arrows": "to", "from": "129.9", "label": 1, "title": "Rp9.517.847,00", "to": "113.9", "value": 9517847, "weight": 1}, {"arrows": "to", "from": "113.9", "label": 1, "title": "Rp104.190.000,00", "to": "16.9", "value": 104190000, "weight": 1}, {"arrows": "to", "from": "16.9", "label": 1, "title": "Rp750.000,00", "to": "22.9", "value": 750000, "weight": 1}, {"arrows": "to", "from": "22.9", "label": 1, "title": "Rp6.660.965.751,00", "to": "14.9", "value": 6660965751, "weight": 1}, {"arrows": "to", "from": "14.9", "label": 1, "title": "Rp500.000.000.000,00", "to": "129.9", "value": 500000000000, "weight": 1}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>

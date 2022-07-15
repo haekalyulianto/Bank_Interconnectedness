@@ -55,7 +55,7 @@ if 'df2' not in st.session_state:
     st.session_state['df5'] = df5
 
 if selected == "Data Bank":
-
+    
     # Sunting Sidebar
     st.sidebar.image("LPS.png", output_format='PNG')
     #nama_bank = st.sidebar.text_input('Pencarian Kode Bank :')
