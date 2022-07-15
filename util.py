@@ -63,8 +63,9 @@ def view_data_from_bank_level(df, inputbankasal, n, df2):
     df3 = df3[['Sandi Bank', 'Nama Bank']]
     return df3.set_index('Sandi Bank').T.to_dict('index')['Nama Bank'][kode_bank]
 
-  def node_input(df0, df2, graph, x):
+  def node_input(df0, df2, graph, x, list_df3):
     if (x < n):
+      list_df3.append(df0)
       for i in range (len(df0)):
         if not int(df0['BankTujuan'].iloc[i]) in graph:
           graph.add_node(int(df0['BankTujuan'].iloc[i]), label=str(df0['BankTujuan'].iloc[i]), title=get_label(df2, int(df0['BankTujuan'].iloc[i])))
@@ -73,21 +74,29 @@ def view_data_from_bank_level(df, inputbankasal, n, df2):
         
         graph.add_edge(int(df0['BankPelapor'].iloc[i]), int(df0['BankTujuan'].iloc[i]), value=int(df0['Jumlah Bulan Laporan'].iloc[i]), title=rupiah(df0['Jumlah Bulan Laporan'].iloc[i]))
         df1 = df[(df['BankPelapor'] == df0['BankTujuan'].iloc[i])]
-        graph = node_input(df1, df2, graph, x+1)
+        graph, df3 = node_input(df1, df2, graph, x+1, list_df3)
 
-    return graph
+    return graph, list_df3
 
   inputbankasal = df2.loc[df2['Nama Bank'] == inputbankasal]['Sandi Bank'].iloc[0]
 
   df1 = df[(df['BankPelapor'] == inputbankasal)]
-  
+  list_df3 = []
+
   graph = nx.Graph()
   graph.add_node(int(inputbankasal), label=str(inputbankasal), title=get_label(df2, inputbankasal))
-  graph = node_input(df1, df2, graph, 0)
+  
+  graph, list_df3 = node_input(df1, df2, graph, 0, list_df3)
+
+  df3 = list_df3[0]
+  for i in range(1, len(list_df3)):
+    df3 = pd.concat([df3, list_df3[i]], sort=False)
 
   nt = Network('500px', '500px', directed=True, bgcolor='rgba(0,0,0,0)', font_color='#ffffff')
   nt.from_nx(graph)
   nt.save_graph('tmp/graph_bank_level.html')
+
+  return df3.reset_index(drop=True)
 
 def simple_cycles(G, cycle_num, cycle_len):
   count_cycles = 0

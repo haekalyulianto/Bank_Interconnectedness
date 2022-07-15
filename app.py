@@ -86,11 +86,15 @@ if selected == "Data Interconnectedness Bank":
 
         # Bank Level
         st.success('Hasil Analisis Interconnectedness Bank : ' + nama_bank + ' Level : ' + str(bank_level) + ' (Periode : ' + st.session_state['periode'] + ')')
-        util.view_data_from_bank_level(st.session_state['df5'], nama_bank, bank_level, st.session_state['df2'])
+        df6 = util.view_data_from_bank_level(st.session_state['df5'], nama_bank, bank_level, st.session_state['df2'])
         file = open('tmp/graph_bank_level.html', 'r', encoding='utf-8')
         source = file.read()
         components.html(source, height = 500)
 
+        # Dataframe
+        st.success('Tabel Analisis Interconnectedness Bank : ' + nama_bank + ' Level : ' + str(bank_level) + ' (Periode : ' + st.session_state['periode'] + ')')
+        st.write(df6)
+        
         # Graph All
         st.success('Hasil Analisis Interconnectedness Keseluruhan')
         # Check graph all exist
