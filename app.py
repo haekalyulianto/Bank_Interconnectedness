@@ -20,31 +20,29 @@ do_refresh = st.sidebar.button('Refresh')
 # Konfigurasi Pilihan Menu
 selected = option_menu(
     menu_title=None,
-    options=["Data Bank", "Data Siklik"],
+    options=["Data Interconnectedness Bank", "Data Siklik"],
     icons=["newspaper", "bank"],
     menu_icon="cast",
     default_index=0,
     orientation="horizontal",)
 
-# Inisialisasi Preprocess biar ga selalu preprcoess kalau di-rerun
+# Inisialisasi Preprocess
 if 'df2' not in st.session_state:
     df1 = pd.read_excel('Data Penempatan Dana Jan - Mei 2022.xlsx')
     df2 = pd.read_excel('LBU Rasio Alat Likuid Mar 2022.xlsx')
-    st.write('df2')
+
     st.session_state['df1'] = df1
     st.session_state['df2'] = df2
     st.session_state['is_changed'] = 0
-    #st.session_state['list_periode'] = [str(x)[:10] for x in df1['Periode Data'].unique()]
+
     list_periode = []
     for periode in [str(x)[:10] for x in df1['Periode Data'].unique()]:
         list_periode.append(periode)
     st.session_state['list_periode'] = list_periode
 
+# Running jika periode yang dipilih berubah
 if 'periode' in st.session_state:
-    st.write('periode')
     if st.session_state['is_changed'] == 1:
-        st.write('ischanged')
-        st.write(st.session_state['periode'])
         df1 = pd.read_excel('Data Penempatan Dana Jan - Mei 2022.xlsx')
 
         df3 = df1[(df1['Periode Data'] == st.session_state['periode'])]
@@ -70,23 +68,17 @@ if 'periode' in st.session_state:
         st.session_state['is_changed'] = 0
 
 st.sidebar.image("LPS.png", output_format='PNG')
-
 def callback():
     st.session_state['is_changed'] = 1
-
 st.sidebar.selectbox('Periode', (st.session_state['list_periode']), on_change=callback, key='periode')
 
-if selected == "Data Bank":
-    
+# Data Interconnectedness Bank
+if selected == "Data Interconnectedness Bank":    
     # Sunting Sidebar
-    #nama_bank = st.sidebar.text_input('Pencarian Kode Bank :')
     nama_bank = st.sidebar.selectbox('Pencarian Nama Bank',(st.session_state['df2']['Nama Bank']))
     bank_level = st.sidebar.number_input('Masukkan Level : ', value=1, step=1)
         
-    # Konfigurasi Web
-    USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36'
-
-    # Menjalankan Analisis Sentimen Berita
+    # Menjalankan Analisis Interconnectedness Bank
     if st.sidebar.button('Run'):
         st.header("Hasil Analisis Interconnectedness Bank")
 
@@ -102,6 +94,7 @@ if selected == "Data Bank":
         source = file.read()
         components.html(source, height = 500)
 
+# Data Siklik
 if selected == "Data Siklik":
     df5 = st.session_state['df5']
     min_persentase_penempatan = df5['Persentase Penempatan'].min()
