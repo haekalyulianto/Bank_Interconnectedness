@@ -9,6 +9,7 @@ from streamlit_option_menu import option_menu
 import util
 import streamlit as st
 import streamlit.components.v1 as components
+from pathlib import Path
 
 # Konfigurasi Halaman
 st.set_page_config(page_title="Interconnectedness",
@@ -33,12 +34,13 @@ if 'df2' not in st.session_state:
 
     st.session_state['df1'] = df1
     st.session_state['df2'] = df2
-    st.session_state['is_changed'] = 0
+    st.session_state['is_changed'] = 1
 
     list_periode = []
     for periode in [str(x)[:10] for x in df1['Periode Data'].unique()]:
         list_periode.append(periode)
     st.session_state['list_periode'] = list_periode
+    st.session_state['periode'] = list_periode[0]
 
 # Running jika periode yang dipilih berubah
 if 'periode' in st.session_state:
@@ -82,14 +84,20 @@ if selected == "Data Interconnectedness Bank":
     if st.sidebar.button('Run'):
         st.header("Hasil Analisis Interconnectedness Bank")
 
+        # Bank Level
         st.success('Hasil Analisis Interconnectedness Bank : ' + nama_bank + ' Level : ' + str(bank_level) + ' (Periode : ' + st.session_state['periode'] + ')')
         util.view_data_from_bank_level(st.session_state['df5'], nama_bank, bank_level, st.session_state['df2'])
         file = open('tmp/graph_bank_level.html', 'r', encoding='utf-8')
         source = file.read()
         components.html(source, height = 500)
 
+        # Graph All
         st.success('Hasil Analisis Interconnectedness Keseluruhan')
-        util.view_all(st.session_state['df5'])
+        # Check graph all exist
+        graph_all_file = Path("tmp/graph_all.html")
+        if not graph_all_file.is_file():
+            util.view_all(st.session_state['df5'])
+        
         file = open('tmp/graph_all.html', 'r', encoding='utf-8')
         source = file.read()
         components.html(source, height = 500)
