@@ -21,7 +21,7 @@ do_refresh = st.sidebar.button('Refresh')
 selected = option_menu(
     menu_title=None,
     options=["Data Interconnectedness Bank", "Data Siklik"],
-    icons=["newspaper", "bank"],
+    icons=["diagram-3", "recycle"],
     menu_icon="cast",
     default_index=0,
     orientation="horizontal",)
@@ -84,13 +84,13 @@ if selected == "Data Interconnectedness Bank":
 
         st.success('Hasil Analisis Interconnectedness Bank : ' + nama_bank + ' Level : ' + str(bank_level) + ' (Periode : ' + st.session_state['periode'] + ')')
         util.view_data_from_bank_level(st.session_state['df5'], nama_bank, bank_level, st.session_state['df2'])
-        file = open('graph_bank_level.html', 'r', encoding='utf-8')
+        file = open('tmp/graph_bank_level.html', 'r', encoding='utf-8')
         source = file.read()
         components.html(source, height = 500)
 
         st.success('Hasil Analisis Interconnectedness Keseluruhan')
         util.view_all(st.session_state['df5'])
-        file = open('graph_all.html', 'r', encoding='utf-8')
+        file = open('tmp/graph_all.html', 'r', encoding='utf-8')
         source = file.read()
         components.html(source, height = 500)
 
@@ -120,7 +120,7 @@ if selected == "Data Siklik":
 
         with col1:
             st.success('Ilustrasi Hasil Analisis Tingkat Sistemik')
-            file = open('graph_cycle.html', 'r', encoding='utf-8')
+            file = open('tmp/graph_cycle.html', 'r', encoding='utf-8')
             source = file.read()
             components.html(source, height=1000)
 
