@@ -53,105 +53,107 @@ def view_all(df):
   nt.show('graph_all.html')
 
 def view_data_from_bank_level(df, inputbankasal, n, df2):
-  def node_input(df0, bankasal, graph, x):
+  def get_label(df3, kode_bank):
+    df3 = df3[['Sandi Bank', 'Nama Bank']]
+    return df3.set_index('Sandi Bank').T.to_dict('index')['Nama Bank'][kode_bank]
+
+  def node_input(df0, df2, graph, x):
     if (x < n):
       for i in range (len(df0)):
         if not int(df0['BankTujuan'].iloc[i]) in graph:
-          graph.add_node(int(df0['BankTujuan'].iloc[i]), label=str(df0['BankTujuan'].iloc[i]))
+          graph.add_node(int(df0['BankTujuan'].iloc[i]), label=str(df0['BankTujuan'].iloc[i]), title=get_label(df2, int(df0['BankTujuan'].iloc[i])))
         if not int(df0['BankPelapor'].iloc[i]) in graph:
-          graph.add_node(int(df0['BankPelapor'].iloc[i]), label=str(df0['BankPelapor'].iloc[i]))
+          graph.add_node(int(df0['BankPelapor'].iloc[i]), label=str(df0['BankPelapor'].iloc[i]), title=get_label(df2, int(df0['BankPelapor'].iloc[i])))
         
-        graph.add_edge(int(df0['BankPelapor'].iloc[i]), int(df0['BankTujuan'].iloc[i]), weight = int(df0['Jumlah Bulan Laporan'].iloc[i]))
+        graph.add_edge(int(df0['BankPelapor'].iloc[i]), int(df0['BankTujuan'].iloc[i]), value=int(df0['Jumlah Bulan Laporan'].iloc[i]), title=str(df0['Jumlah Bulan Laporan'].iloc[i]))
         df1 = df[(df['BankPelapor'] == df0['BankTujuan'].iloc[i])]
-        graph = node_input(df1, df0['BankTujuan'].iloc[i], graph, x+1)
+        graph = node_input(df1, df2, graph, x+1)
 
     return graph
 
   inputbankasal = df2.loc[df2['Nama Bank'] == inputbankasal]['Sandi Bank'].iloc[0]
 
-  graph = nx.Graph()
-  graph.add_node(int(inputbankasal), label=str(inputbankasal))
-
   df1 = df[(df['BankPelapor'] == inputbankasal)]
   
-  graph = node_input(df1, inputbankasal, graph, 0)
+  graph = nx.Graph()
+  graph = node_input(df1, df2, graph, 0)
 
   nt = Network('500px', '500px', directed=True, bgcolor='rgba(0,0,0,0)', font_color='#ffffff')
   nt.from_nx(graph)
   nt.show('graph_bank_level.html')
 
 def simple_cycles(G, cycle_num, cycle_len):
-    count_cycles = 0
-    flag_cycle = 0
+  count_cycles = 0
+  flag_cycle = 0
 
-    def _unblock(thisnode, blocked, B):
-        stack = {thisnode}
-        while stack:
-            node = stack.pop()
-            if node in blocked:
-                blocked.remove(node)
-                stack.update(B[node])
-                B[node].clear()
+  def _unblock(thisnode, blocked, B):
+    stack = {thisnode}
+    while stack:
+      node = stack.pop()
+      if node in blocked:
+        blocked.remove(node)
+        stack.update(B[node])
+        B[node].clear()
 
-    subG = type(G)(G.edges())
-    sccs = [scc for scc in nx.strongly_connected_components(subG) if len(scc) > 1]
+  subG = type(G)(G.edges())
+  sccs = [scc for scc in nx.strongly_connected_components(subG) if len(scc) > 1]
 
-    for v in subG:
-        if subG.has_edge(v, v):
-            yield [v]
-            subG.remove_edge(v, v)
+  for v in subG:
+    if subG.has_edge(v, v):
+      yield [v]
+      subG.remove_edge(v, v)
 
-    while sccs:
-        scc = sccs.pop()
-        sccG = subG.subgraph(scc)
+  while sccs:
+    scc = sccs.pop()
+    sccG = subG.subgraph(scc)
 
-        startnode = scc.pop()
+    startnode = scc.pop()
 
-        path = [startnode]
-        blocked = set()  
-        closed = set()  
-        blocked.add(startnode)
-        B = defaultdict(set) 
-        stack = [(startnode, list(sccG[startnode]))]  
-        while stack:
-            thisnode, nbrs = stack[-1]
-            if nbrs:
-                nextnode = nbrs.pop()
-                if nextnode == startnode:
-                    if (len(path) <= cycle_len):
-                      yield path[:]
-                      closed.update(path)
-                      count_cycles += 1
-                      if (count_cycles == cycle_num):
-                        flag_cycle = 1
-                        break
+    path = [startnode]
+    blocked = set()  
+    closed = set()  
+    blocked.add(startnode)
+    B = defaultdict(set) 
+    stack = [(startnode, list(sccG[startnode]))]  
+    while stack:
+      thisnode, nbrs = stack[-1]
+      if nbrs:
+        nextnode = nbrs.pop()
+        if nextnode == startnode:
+          if (len(path) <= cycle_len):
+            yield path[:]
+            closed.update(path)
+            count_cycles += 1
+            if (count_cycles == cycle_num):
+              flag_cycle = 1
+              break
 
-                elif nextnode not in blocked:
-                    path.append(nextnode)
-                    stack.append((nextnode, list(sccG[nextnode])))
-                    closed.discard(nextnode)
-                    blocked.add(nextnode)
+        elif nextnode not in blocked:
+          path.append(nextnode)
+          stack.append((nextnode, list(sccG[nextnode])))
+          closed.discard(nextnode)
+          blocked.add(nextnode)
 
-                    continue
-            if (flag_cycle == 1):
-                break
+          continue
+      if (flag_cycle == 1):
+        break
 
-            if not nbrs:  
-                if thisnode in closed:
-                    _unblock(thisnode, blocked, B)
-                else:
-                    for nbr in sccG[thisnode]:
-                        if thisnode not in B[nbr]:
-                            B[nbr].add(thisnode)
-                        
-                stack.pop()
-         
-                path.pop()
+      if not nbrs:  
+        if thisnode in closed:
+          _unblock(thisnode, blocked, B)
+        else:
+          for nbr in sccG[thisnode]:
+            if thisnode not in B[nbr]:
+              B[nbr].add(thisnode)
+            
+        stack.pop()
+  
+        path.pop()
 
-        H = subG.subgraph(scc)  
-        sccs.extend(scc for scc in nx.strongly_connected_components(H) if len(scc) > 1)
-        if (count_cycles >= cycle_num):
-            break
+    H = subG.subgraph(scc)  
+    sccs.extend(scc for scc in nx.strongly_connected_components(H) if len(scc) > 1)
+    if (count_cycles >= cycle_num):
+      break
 
 def filter_bank(df, min_persentase_penempatan = None, max_persentase_penempatan = None, min_penempatan_per_al = None, 
                 max_penempatan_per_al = None, min_kewajiban_per_al = None, max_kewajiban_per_al = None):

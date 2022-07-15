@@ -36,9 +36,8 @@ if 'df2' not in st.session_state:
     df3 = df3.reset_index(drop=True)
 
     df4 = pd.read_excel('LBU Rasio Alat Likuid Mar 2022.xlsx')
-    df4.to_csv('AL_Mar22.csv', index=False)
+    df4.to_csv('AL_' + periode + '.csv', index=False)
 
-    df4 = pd.read_csv('AL_Mar22.csv')
     df4 = df4[['Sandi Bank', 'Penem Bank Lain IDR', 'Kewajiban Bank Lain IDR', 'Total AL']]
 
     df5 = util.inputo(df3, df4)
