@@ -30,34 +30,55 @@ selected = option_menu(
 if 'df2' not in st.session_state:
     df1 = pd.read_excel('Data Penempatan Dana Jan - Mei 2022.xlsx')
     df2 = pd.read_excel('LBU Rasio Alat Likuid Mar 2022.xlsx')
-
-    periode = '2022-03-31'
-    df3 = df1[(df1['Periode Data'] == periode)]
-    df3 = df3.reset_index(drop=True)
-
-    df4 = pd.read_excel('LBU Rasio Alat Likuid Mar 2022.xlsx')
-    df4.to_csv('AL_' + periode + '.csv', index=False)
-
-    df4 = df4[['Sandi Bank', 'Penem Bank Lain IDR', 'Kewajiban Bank Lain IDR', 'Total AL']]
-
-    df5 = util.inputo(df3, df4)
-
-    df5 = util.calculate_penempatan_total(df5)
-
-    df5 = df5[[ 'BankPelapor', 'BankTujuan', 'Jumlah Bulan Laporan', 'Persentase Penempatan', 'Total Penempatan',
-            'Total Kewajiban', 'Penempatan/AL', 'Kewajiban/AL']]
-    df5 = df5[df5['Jumlah Bulan Laporan'] > 0]
-
-    df5 = df5.sort_values(by = ['BankPelapor'])
-    df5 = df5.reset_index(drop=True)
-
+    st.write('df2')
+    st.session_state['df1'] = df1
     st.session_state['df2'] = df2
-    st.session_state['df5'] = df5
+    st.session_state['is_changed'] = 0
+    #st.session_state['list_periode'] = [str(x)[:10] for x in df1['Periode Data'].unique()]
+    list_periode = []
+    for periode in [str(x)[:10] for x in df1['Periode Data'].unique()]:
+        list_periode.append(periode)
+    st.session_state['list_periode'] = list_periode
+
+if 'periode' in st.session_state:
+    st.write('periode')
+    if st.session_state['is_changed'] == 1:
+        st.write('ischanged')
+        st.write(st.session_state['periode'])
+        df1 = pd.read_excel('Data Penempatan Dana Jan - Mei 2022.xlsx')
+
+        df3 = df1[(df1['Periode Data'] == st.session_state['periode'])]
+        df3 = df3.reset_index(drop=True)
+
+        df4 = pd.read_excel('LBU Rasio Alat Likuid Mar 2022.xlsx')
+        df4.to_csv('AL_' + st.session_state['periode'] + '.csv', index=False)
+
+        df4 = df4[['Sandi Bank', 'Penem Bank Lain IDR', 'Kewajiban Bank Lain IDR', 'Total AL']]
+
+        df5 = util.inputo(df3, df4)
+
+        df5 = util.calculate_penempatan_total(df5)
+
+        df5 = df5[[ 'BankPelapor', 'BankTujuan', 'Jumlah Bulan Laporan', 'Persentase Penempatan', 'Total Penempatan',
+                'Total Kewajiban', 'Penempatan/AL', 'Kewajiban/AL']]
+        df5 = df5[df5['Jumlah Bulan Laporan'] > 0]
+
+        df5 = df5.sort_values(by = ['BankPelapor'])
+        df5 = df5.reset_index(drop=True)
+
+        st.session_state['df5'] = df5
+        st.session_state['is_changed'] = 0
+
+st.sidebar.image("LPS.png", output_format='PNG')
+
+def callback():
+    st.session_state['is_changed'] = 1
+
+st.sidebar.selectbox('Periode', (st.session_state['list_periode']), on_change=callback, key='periode')
 
 if selected == "Data Bank":
     
     # Sunting Sidebar
-    st.sidebar.image("LPS.png", output_format='PNG')
     #nama_bank = st.sidebar.text_input('Pencarian Kode Bank :')
     nama_bank = st.sidebar.selectbox('Pencarian Nama Bank',(st.session_state['df2']['Nama Bank']))
     bank_level = st.sidebar.number_input('Masukkan Level : ', value=1, step=1)
@@ -69,7 +90,7 @@ if selected == "Data Bank":
     if st.sidebar.button('Run'):
         st.header("Hasil Analisis Interconnectedness Bank")
 
-        st.success('Hasil Analisis Interconnectedness Bank : ' + nama_bank + ' Level : ' + str(bank_level))
+        st.success('Hasil Analisis Interconnectedness Bank : ' + nama_bank + ' Level : ' + str(bank_level) + ' (Periode : ' + st.session_state['periode'] + ')')
         util.view_data_from_bank_level(st.session_state['df5'], nama_bank, bank_level, st.session_state['df2'])
         file = open('graph_bank_level.html', 'r', encoding='utf-8')
         source = file.read()
@@ -90,7 +111,6 @@ if selected == "Data Siklik":
     min_kewajiban_per_al = df5['Kewajiban/AL'].min()
     max_kewajiban_per_al = df5['Kewajiban/AL'].max()
 
-    st.sidebar.image("LPS.png", output_format='PNG')
     filter_persentase_penempatan_min, filter_persentase_penempatan_max = st.sidebar.slider('Persentase Penempatan : ', min_persentase_penempatan, max_persentase_penempatan, (min_persentase_penempatan, max_persentase_penempatan))
     filter_penempatan_per_al_min, filter_penempatan_per_al_max = st.sidebar.slider('Penempatan/AL : ', min_penempatan_per_al, max_penempatan_per_al, (min_penempatan_per_al, max_penempatan_per_al))
     filter_kewajiban_per_al_min, filter_kewajiban_per_al_max = st.sidebar.slider('Kewajiban/AL : ', min_kewajiban_per_al, max_kewajiban_per_al, (min_kewajiban_per_al, max_kewajiban_per_al))
