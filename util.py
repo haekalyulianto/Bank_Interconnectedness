@@ -53,7 +53,7 @@ def view_all(df):
   
   nt = Network('500px', '500px', directed=True, bgcolor='rgba(0,0,0,0)', font_color='#ffffff')
   nt.from_nx(graph)
-  nt.save_graph('tmp/graph_all.html')
+  nt.save_graph('/tmp/graph_all.html')
 
 def view_data_from_bank_level(df, inputbankasal, n, df2):
   def get_label(df3, kode_bank):
@@ -91,7 +91,7 @@ def view_data_from_bank_level(df, inputbankasal, n, df2):
 
   nt = Network('500px', '500px', directed=True, bgcolor='rgba(0,0,0,0)', font_color='#ffffff')
   nt.from_nx(graph)
-  nt.save_graph('tmp/graph_bank_level.html')
+  nt.save_graph('/tmp/graph_bank_level.html')
 
   return df3.reset_index(drop=True)
 
