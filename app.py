@@ -80,12 +80,12 @@ if selected == "Data Tingkat Sistemik Bank":
     nama_bank = st.sidebar.selectbox('Pencarian Nama Bank',(st.session_state['df2']['Nama Bank']))
     
     df5 = st.session_state['df5']
-    min_persentase_penempatan = df5['Persentase Penempatan'].min()
-    max_persentase_penempatan = df5['Persentase Penempatan'].max()
-    min_penempatan_per_al = df5['Penempatan/AL'].min()
-    max_penempatan_per_al = df5['Penempatan/AL'].max()
-    min_kewajiban_per_al = df5['Kewajiban/AL'].min()
-    max_kewajiban_per_al = df5['Kewajiban/AL'].max()
+    min_persentase_penempatan = float(df5['Persentase Penempatan'].min())
+    max_persentase_penempatan = float(df5['Persentase Penempatan'].max())
+    min_penempatan_per_al = float(df5['Penempatan/AL'].min())
+    max_penempatan_per_al = float(df5['Penempatan/AL'].max())
+    min_kewajiban_per_al = float(df5['Kewajiban/AL'].min())
+    max_kewajiban_per_al = float(df5['Kewajiban/AL'].max())
 
     filter_persentase_penempatan_min, filter_persentase_penempatan_max = st.sidebar.slider('Persentase Penempatan : ', min_persentase_penempatan, max_persentase_penempatan, (min_persentase_penempatan, max_persentase_penempatan))
     filter_penempatan_per_al_min, filter_penempatan_per_al_max = st.sidebar.slider('Penempatan/AL : ', min_penempatan_per_al, max_penempatan_per_al, (min_penempatan_per_al, max_penempatan_per_al))
@@ -114,12 +114,12 @@ if selected == "Data Siklik Bank":
     cycle_num = st.sidebar.number_input('Masukkan Jumlah Siklik : ', value=10, step=1)
     cycle_len = st.sidebar.number_input('Masukkan Panjang Siklik : ', value=5, step=1)
 
-    min_persentase_penempatan = df5['Persentase Penempatan'].min()
-    max_persentase_penempatan = df5['Persentase Penempatan'].max()
-    min_penempatan_per_al = df5['Penempatan/AL'].min()
-    max_penempatan_per_al = df5['Penempatan/AL'].max()
-    min_kewajiban_per_al = df5['Kewajiban/AL'].min()
-    max_kewajiban_per_al = df5['Kewajiban/AL'].max()
+    min_persentase_penempatan = float(df5['Persentase Penempatan'].min())
+    max_persentase_penempatan = float(df5['Persentase Penempatan'].max())
+    min_penempatan_per_al = float(df5['Penempatan/AL'].min())
+    max_penempatan_per_al = float(df5['Penempatan/AL'].max())
+    min_kewajiban_per_al = float(df5['Kewajiban/AL'].min())
+    max_kewajiban_per_al = float(df5['Kewajiban/AL'].max())
 
     filter_persentase_penempatan_min, filter_persentase_penempatan_max = st.sidebar.slider('Persentase Penempatan : ', min_persentase_penempatan, max_persentase_penempatan, (min_persentase_penempatan, max_persentase_penempatan))
     filter_penempatan_per_al_min, filter_penempatan_per_al_max = st.sidebar.slider('Penempatan/AL : ', min_penempatan_per_al, max_penempatan_per_al, (min_penempatan_per_al, max_penempatan_per_al))
