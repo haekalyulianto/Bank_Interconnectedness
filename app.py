@@ -21,8 +21,8 @@ do_refresh = st.sidebar.button('Refresh')
 # Konfigurasi Pilihan Menu
 selected = option_menu(
     menu_title=None,
-    options=["Data Interconnectedness Bank", "Data Siklik"],
-    icons=["diagram-3", "recycle"],
+    options=["Data Tingkat Sistemik Bank", "Data Siklik Bank", "Data Interconnectedness Bank"],
+    icons=["arrow-repeat","recycle", "diagram-3"],
     menu_icon="cast",
     default_index=0,
     orientation="horizontal",)
@@ -74,6 +74,75 @@ def callback():
     st.session_state['is_changed'] = 1
 st.sidebar.selectbox('Periode', (st.session_state['list_periode']), on_change=callback, key='periode')
 
+# Data Tingkat Sistemik Bank
+if selected == "Data Tingkat Sistemik Bank":
+
+    nama_bank = st.sidebar.selectbox('Pencarian Nama Bank',(st.session_state['df2']['Nama Bank']))
+    
+    df5 = st.session_state['df5']
+    min_persentase_penempatan = df5['Persentase Penempatan'].min()
+    max_persentase_penempatan = df5['Persentase Penempatan'].max()
+    min_penempatan_per_al = df5['Penempatan/AL'].min()
+    max_penempatan_per_al = df5['Penempatan/AL'].max()
+    min_kewajiban_per_al = df5['Kewajiban/AL'].min()
+    max_kewajiban_per_al = df5['Kewajiban/AL'].max()
+
+    filter_persentase_penempatan_min, filter_persentase_penempatan_max = st.sidebar.slider('Persentase Penempatan : ', min_persentase_penempatan, max_persentase_penempatan, (min_persentase_penempatan, max_persentase_penempatan))
+    filter_penempatan_per_al_min, filter_penempatan_per_al_max = st.sidebar.slider('Penempatan/AL : ', min_penempatan_per_al, max_penempatan_per_al, (min_penempatan_per_al, max_penempatan_per_al))
+    filter_kewajiban_per_al_min, filter_kewajiban_per_al_max = st.sidebar.slider('Kewajiban/AL : ', min_kewajiban_per_al, max_kewajiban_per_al, (min_kewajiban_per_al, max_kewajiban_per_al))
+
+    # Menjalankan Analisis Tingkat Sistemik Bank
+    if st.sidebar.button('Run'):
+        st.header("Hasil Analisis Tingkat Sistemik Bank")
+
+        # Menampilkan Hasil Dari Bank
+        df7 = util.filter_bank(st.session_state['df5'], filter_persentase_penempatan_min, filter_persentase_penempatan_max, filter_penempatan_per_al_min, filter_penempatan_per_al_max, filter_kewajiban_per_al_min, filter_kewajiban_per_al_max)
+        df7 = util.generate_placement_from_bank(df7, nama_bank, st.session_state['df2'])
+        st.success('Tabel Penempatan Dana dari Bank ' + nama_bank)
+        st.write(df7)
+
+        # Menampilkan Hasil Ke Bank
+        df8 = util.filter_bank(st.session_state['df5'], filter_persentase_penempatan_min, filter_persentase_penempatan_max, filter_penempatan_per_al_min, filter_penempatan_per_al_max, filter_kewajiban_per_al_min, filter_kewajiban_per_al_max)
+        df8 = util.generate_placement_to_bank(df8, nama_bank, st.session_state['df2'])
+        st.success('Tabel Penempatan Dana ke Bank ' + nama_bank)
+        st.write(df8)
+
+# Data Siklik
+if selected == "Data Siklik Bank":
+    df5 = st.session_state['df5']
+
+    cycle_num = st.sidebar.number_input('Masukkan Jumlah Siklik : ', value=10, step=1)
+    cycle_len = st.sidebar.number_input('Masukkan Panjang Siklik : ', value=5, step=1)
+
+    min_persentase_penempatan = df5['Persentase Penempatan'].min()
+    max_persentase_penempatan = df5['Persentase Penempatan'].max()
+    min_penempatan_per_al = df5['Penempatan/AL'].min()
+    max_penempatan_per_al = df5['Penempatan/AL'].max()
+    min_kewajiban_per_al = df5['Kewajiban/AL'].min()
+    max_kewajiban_per_al = df5['Kewajiban/AL'].max()
+
+    filter_persentase_penempatan_min, filter_persentase_penempatan_max = st.sidebar.slider('Persentase Penempatan : ', min_persentase_penempatan, max_persentase_penempatan, (min_persentase_penempatan, max_persentase_penempatan))
+    filter_penempatan_per_al_min, filter_penempatan_per_al_max = st.sidebar.slider('Penempatan/AL : ', min_penempatan_per_al, max_penempatan_per_al, (min_penempatan_per_al, max_penempatan_per_al))
+    filter_kewajiban_per_al_min, filter_kewajiban_per_al_max = st.sidebar.slider('Kewajiban/AL : ', min_kewajiban_per_al, max_kewajiban_per_al, (min_kewajiban_per_al, max_kewajiban_per_al))
+
+    if st.sidebar.button('Run'):
+        st.header("Hasil Analisis Interconnectedness Siklik Bank")
+
+        df6 = util.filter_bank(st.session_state['df5'], filter_persentase_penempatan_min, filter_persentase_penempatan_max, filter_penempatan_per_al_min, filter_penempatan_per_al_max, filter_kewajiban_per_al_min, filter_kewajiban_per_al_max)
+        df7 = util.view_data_cycle_all(df6, cycle_num, cycle_len, st.session_state['df2'])
+
+        col1, col2 = st.columns(2)
+
+        with col1:
+            st.success('Ilustrasi Hasil Analisis Siklik Bank')
+            file = open('tmp/graph_cycle.html', 'r', encoding='utf-8')
+            source = file.read()
+            components.html(source, height=1000)
+
+        with col2:
+            st.success('Tabel Hasil Analisis Siklik Bank')
+            st.dataframe(data=df7, height=1000)
+
 # Data Interconnectedness Bank
 if selected == "Data Interconnectedness Bank":    
     # Sunting Sidebar
@@ -105,37 +174,3 @@ if selected == "Data Interconnectedness Bank":
         file = open('tmp/graph_all.html', 'r', encoding='utf-8')
         source = file.read()
         components.html(source, height = 500)
-
-# Data Siklik
-if selected == "Data Siklik":
-    df5 = st.session_state['df5']
-    min_persentase_penempatan = df5['Persentase Penempatan'].min()
-    max_persentase_penempatan = df5['Persentase Penempatan'].max()
-    min_penempatan_per_al = df5['Penempatan/AL'].min()
-    max_penempatan_per_al = df5['Penempatan/AL'].max()
-    min_kewajiban_per_al = df5['Kewajiban/AL'].min()
-    max_kewajiban_per_al = df5['Kewajiban/AL'].max()
-
-    filter_persentase_penempatan_min, filter_persentase_penempatan_max = st.sidebar.slider('Persentase Penempatan : ', min_persentase_penempatan, max_persentase_penempatan, (min_persentase_penempatan, max_persentase_penempatan))
-    filter_penempatan_per_al_min, filter_penempatan_per_al_max = st.sidebar.slider('Penempatan/AL : ', min_penempatan_per_al, max_penempatan_per_al, (min_penempatan_per_al, max_penempatan_per_al))
-    filter_kewajiban_per_al_min, filter_kewajiban_per_al_max = st.sidebar.slider('Kewajiban/AL : ', min_kewajiban_per_al, max_kewajiban_per_al, (min_kewajiban_per_al, max_kewajiban_per_al))
-    cycle_num = st.sidebar.number_input('Masukkan Jumlah Siklik : ', value=10, step=1)
-    cycle_len = st.sidebar.number_input('Masukkan Panjang Siklik : ', value=5, step=1)
-
-    if st.sidebar.button('Run'):
-        st.header("Hasil Analisis Interconnectedness Siklik Bank")
-
-        df6 = util.filter_bank(st.session_state['df5'], filter_persentase_penempatan_min, filter_persentase_penempatan_max, filter_penempatan_per_al_min, filter_penempatan_per_al_max, filter_kewajiban_per_al_min, filter_kewajiban_per_al_max)
-        df7 = util.view_data_cycle_all(df6, cycle_num, cycle_len, st.session_state['df2'])
-
-        col1, col2 = st.columns(2)
-
-        with col1:
-            st.success('Ilustrasi Hasil Analisis Tingkat Sistemik')
-            file = open('tmp/graph_cycle.html', 'r', encoding='utf-8')
-            source = file.read()
-            components.html(source, height=1000)
-
-        with col2:
-            st.success('Tabel Hasil Analisis Tingkat Sistemik')
-            st.dataframe(data=df7, height=1000)
