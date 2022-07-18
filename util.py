@@ -3,15 +3,12 @@ import networkx as nx
 import pandas as pd
 import numpy as np
 from collections import defaultdict
-import locale
 import warnings
 warnings.simplefilter(action='ignore')
 
 def rupiah(num):
-  locale.setlocale(locale.LC_NUMERIC, 'IND')
-  rupiah = locale.format("%.*f", (2, num), True)
-  return "Rp{}".format(rupiah)
-
+  return "Rp{:,}".format(num).replace(',','.') + ',00' 
+  
 def inputo(df1, df2):
   #df1 = Data Penempatan Dana
   #df2 = LBU Rasio Alat Likuid 
@@ -84,7 +81,7 @@ def view_data_from_bank_level(df, inputbankasal, n, df2):
   list_df3 = []
 
   graph = nx.Graph()
-  graph.add_node(int(inputbankasal), label=str(inputbankasal), title=get_label(df2, inputbankasal))
+  graph.add_node(int(inputbankasal), label=str(inputbankasal), title=get_label(df2, inputbankasal), color = 'red')
   
   graph, list_df3 = node_input(df1, df2, graph, 0, list_df3)
 
