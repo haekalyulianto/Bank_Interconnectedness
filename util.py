@@ -258,3 +258,57 @@ def view_data_cycle_all(df, cycle_num, cycle_len, df2):
   df3 = df3.reset_index(drop=True)
 
   return df3
+
+# Generate all placement to certain bank
+def generate_placement_to_bank(df, inputbankasal, df2):
+  inputbankasal = df2.loc[df2['Nama Bank'] == inputbankasal]['Sandi Bank'].iloc[0]
+
+  df1 = df[(df['BankTujuan'] == inputbankasal)]
+  df3 = pd.DataFrame(columns=list(df1.columns))
+  
+  i = 0
+  while(i < len(df1)):
+    if (not df1['BankPelapor'].iloc[i] in list(df3['BankTujuan'])):
+      df1 = df1.append(df[df['BankTujuan'] == df1['BankPelapor'].iloc[i]])
+    
+    flag = 0
+    if (df1['BankPelapor'].iloc[i] in list(df3['BankPelapor'])):
+      dftemp = df3[df3['BankPelapor'] == df1['BankPelapor'].iloc[i]]
+      if (df1['BankTujuan'].iloc[i] in list(dftemp['BankTujuan'])):
+        flag = 1
+
+    if (flag == 0):
+      df3 = df3.append(df1.iloc[i])
+
+    i += 1
+
+  df3 = df3[['BankTujuan', 'BankPelapor', 'Jumlah Bulan Laporan',
+       'Persentase Penempatan', 'Total Penempatan', 'Total Kewajiban',
+       'Penempatan/AL', 'Kewajiban/AL']]
+  
+  return df3.reset_index(drop=True)
+
+# Generate all placement from certain bank
+def generate_placement_from_bank(df, inputbankasal, df2):
+  inputbankasal = df2.loc[df2['Nama Bank'] == inputbankasal]['Sandi Bank'].iloc[0]
+
+  df1 = df[(df['BankPelapor'] == inputbankasal)]
+  df3 = pd.DataFrame(columns=list(df1.columns))
+  
+  i = 0
+  while(i < len(df1)):
+    if (not df1['BankTujuan'].iloc[i] in list(df3['BankPelapor'])):
+      df1 = df1.append(df[df['BankPelapor'] == df1['BankTujuan'].iloc[i]])
+    
+    flag = 0
+    if (df1['BankPelapor'].iloc[i] in list(df3['BankPelapor'])):
+      dftemp = df3[df3['BankPelapor'] == df1['BankPelapor'].iloc[i]]
+      if (df1['BankTujuan'].iloc[i] in list(dftemp['BankTujuan'])):
+        flag = 1
+
+    if (flag == 0):
+      df3 = df3.append(df1.iloc[i])
+
+    i += 1
+
+  return df3.reset_index(drop=True)
