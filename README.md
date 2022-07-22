@@ -1,2 +1,2 @@
-# Analisis Interconnectedness Bank di Indonesia
+# Analisis Interconnectedness Bank
 Group Pengelolaan Data dan Statistik (GPDS)
