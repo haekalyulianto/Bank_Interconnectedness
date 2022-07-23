@@ -1,8 +1,8 @@
-# Analisis Interconnectedness Bank
-Bank Interconnectedness Analysis
-<br />
-<br />
+# Bank Interconnectedness Analysis
 Group Pengelolaan Data dan Statistik (GPDS)
+<br />
+<br />
+Lembaga Penjamin Simpanan (LPS)
 <br />
 <br />
 # Authors
