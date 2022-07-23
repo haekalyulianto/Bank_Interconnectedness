@@ -77,7 +77,7 @@ st.sidebar.selectbox('Periode', (st.session_state['list_periode']), on_change=ca
 # Data Tingkat Sistemik Bank
 if selected == "Data Tingkat Sistemik Bank":
 
-    nama_bank = st.sidebar.selectbox('Pencarian Nama Bank',(st.session_state['df2']['Nama Bank']))
+    nama_bank = st.sidebar.selectbox('Nama Bank : ',(st.session_state['df2']['Nama Bank']))
     
     df5 = st.session_state['df5']
     min_persentase_penempatan = float(df5['Persentase Penempatan'].min())
@@ -111,8 +111,8 @@ if selected == "Data Tingkat Sistemik Bank":
 if selected == "Data Siklik Bank":
     df5 = st.session_state['df5']
 
-    cycle_num = st.sidebar.number_input('Masukkan Jumlah Siklik : ', value=10, step=1)
-    cycle_len = st.sidebar.number_input('Masukkan Panjang Siklik : ', value=5, step=1)
+    cycle_num = st.sidebar.number_input('Jumlah Siklik : ', value=10, step=1)
+    cycle_len = st.sidebar.number_input('Panjang Siklik : ', value=5, step=1)
 
     min_persentase_penempatan = float(df5['Persentase Penempatan'].min())
     max_persentase_penempatan = float(df5['Persentase Penempatan'].max())
@@ -146,8 +146,8 @@ if selected == "Data Siklik Bank":
 # Data Interconnectedness Bank
 if selected == "Data Interconnectedness Bank":    
     # Sunting Sidebar
-    nama_bank = st.sidebar.selectbox('Pencarian Nama Bank',(st.session_state['df2']['Nama Bank']))
-    bank_level = st.sidebar.number_input('Masukkan Level : ', value=1, step=1)
+    nama_bank = st.sidebar.selectbox('Nama Bank : ',(st.session_state['df2']['Nama Bank']))
+    bank_level = st.sidebar.number_input('Level : ', value=1, step=1)
         
     # Menjalankan Analisis Interconnectedness Bank
     if st.sidebar.button('Run'):
