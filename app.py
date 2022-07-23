@@ -72,7 +72,7 @@ if 'periode' in st.session_state:
 st.sidebar.image("LPS.png", output_format='PNG')
 def callback():
     st.session_state['is_changed'] = 1
-st.sidebar.selectbox('Periode', (st.session_state['list_periode']), on_change=callback, key='periode')
+st.sidebar.selectbox('Periode : ', (st.session_state['list_periode']), on_change=callback, key='periode')
 
 # Data Tingkat Sistemik Bank
 if selected == "Data Tingkat Sistemik Bank":
