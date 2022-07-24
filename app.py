@@ -59,8 +59,8 @@ if 'periode' in st.session_state:
 
         df5 = util.calculate_penempatan_total(df5)
 
-        df5 = df5[[ 'BankPelapor', 'BankTujuan', 'Jumlah Bulan Laporan', 'Persentase Penempatan', 'Total Penempatan',
-                'Total Kewajiban', 'Penempatan/AL', 'Kewajiban/AL']]
+        df5 = df5[[ 'BankPelapor', 'BankTujuan', 'Jumlah Bulan Laporan', 'Total Penempatan', 'Persentase Penempatan',
+                    'Penempatan/AL', 'Total Kewajiban', 'Kewajiban/AL']]
         df5 = df5[df5['Jumlah Bulan Laporan'] > 0]
 
         df5 = df5.sort_values(by = ['BankPelapor'])
