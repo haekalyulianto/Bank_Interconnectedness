@@ -98,14 +98,14 @@ if selected == "Data Tingkat Sistemik Bank":
         # Menampilkan Hasil Dari Bank
         df7 = util.filter_bank(st.session_state['df5'], filter_persentase_penempatan_min, filter_persentase_penempatan_max, filter_penempatan_per_al_min, filter_penempatan_per_al_max, filter_kewajiban_per_al_min, filter_kewajiban_per_al_max)
         df7 = util.generate_placement_from_bank(df7, nama_bank, st.session_state['df2'])
-        df7[['BankPelapor', 'BankTujuan']].astype(int)
+        df7[['BankPelapor', 'BankTujuan']] = df7[['BankPelapor', 'BankTujuan']].astype(int)
         st.success('Tabel Penempatan Dana dari Bank ' + nama_bank)
         st.write(df7)
 
         # Menampilkan Hasil Ke Bank
         df8 = util.filter_bank(st.session_state['df5'], filter_persentase_penempatan_min, filter_persentase_penempatan_max, filter_penempatan_per_al_min, filter_penempatan_per_al_max, filter_kewajiban_per_al_min, filter_kewajiban_per_al_max)
         df8 = util.generate_placement_to_bank(df8, nama_bank, st.session_state['df2'])
-        df8[['BankPelapor', 'BankTujuan']].astype(int)
+        df8[['BankPelapor', 'BankTujuan']] = df8[['BankPelapor', 'BankTujuan']].astype(int)
         st.success('Tabel Penempatan Dana ke Bank ' + nama_bank)
         st.write(df8)
 
