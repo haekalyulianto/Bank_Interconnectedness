@@ -282,9 +282,8 @@ def generate_placement_to_bank(df, inputbankasal, df2):
 
     i += 1
 
-  df3 = df3[['BankTujuan', 'BankPelapor', 'Jumlah Bulan Laporan',
-       'Persentase Penempatan', 'Total Penempatan', 'Total Kewajiban',
-       'Penempatan/AL', 'Kewajiban/AL']]
+  df3 = df3[['BankTujuan', 'BankPelapor', 'Jumlah Bulan Laporan', 'Total Penempatan', 'Persentase Penempatan',
+                    'Penempatan/AL', 'Total Kewajiban', 'Kewajiban/AL']]
   
   return df3.reset_index(drop=True)
 
