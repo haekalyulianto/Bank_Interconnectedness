@@ -91,16 +91,16 @@ if selected == "Data Interconnectedness Bank":
     filter_penempatan_per_al_min, filter_penempatan_per_al_max = st.sidebar.slider('Penempatan/AL : ', min_penempatan_per_al, max_penempatan_per_al, (min_penempatan_per_al, max_penempatan_per_al))
     filter_kewajiban_per_al_min, filter_kewajiban_per_al_max = st.sidebar.slider('Kewajiban/AL : ', min_kewajiban_per_al, max_kewajiban_per_al, (min_kewajiban_per_al, max_kewajiban_per_al))
 
-    # Menjalankan Analisis Tingkat Sistemik Bank
+    # Menjalankan Hasil Analisis Interconnectedness Bank
     if st.sidebar.button('Run'):
-        st.header("Hasil Analisis Tingkat Sistemik Bank")
+        st.header("Hasil Analisis Interconnectedness Bank")
 
         # Menampilkan Hasil Dari Bank
-        df7 = util.filter_bank(st.session_state['df5'], filter_persentase_penempatan_min, filter_persentase_penempatan_max, filter_penempatan_per_al_min, filter_penempatan_per_al_max, filter_kewajiban_per_al_min, filter_kewajiban_per_al_max)
-        df7 = util.generate_placement_from_bank(df7, nama_bank, st.session_state['df2'])
-        df7[['BankPelapor', 'BankTujuan']] = df7[['BankPelapor', 'BankTujuan']].astype(int)
-        st.success('Tabel Penempatan Dana dari Bank ' + nama_bank)
-        st.write(df7)
+#         df7 = util.filter_bank(st.session_state['df5'], filter_persentase_penempatan_min, filter_persentase_penempatan_max, filter_penempatan_per_al_min, filter_penempatan_per_al_max, filter_kewajiban_per_al_min, filter_kewajiban_per_al_max)
+#         df7 = util.generate_placement_from_bank(df7, nama_bank, st.session_state['df2'])
+#         df7[['BankPelapor', 'BankTujuan']] = df7[['BankPelapor', 'BankTujuan']].astype(int)
+#         st.success('Tabel Penempatan Dana dari Bank ' + nama_bank)
+#         st.write(df7)
 
         # Menampilkan Hasil Ke Bank
         df8 = util.filter_bank(st.session_state['df5'], filter_persentase_penempatan_min, filter_persentase_penempatan_max, filter_penempatan_per_al_min, filter_penempatan_per_al_max, filter_kewajiban_per_al_min, filter_kewajiban_per_al_max)
