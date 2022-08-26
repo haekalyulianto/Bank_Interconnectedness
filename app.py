@@ -163,7 +163,7 @@ if selected == "Level Penempatan Dana":
         components.html(source, height = 500)
 
         # Dataframe
-        st.success('Tabel Analisis Level Penempatan Dana : ' + nama_bank + ' Level : ' + str(bank_level) + ' (Periode : ' + st.session_state['periode'] + ')')
+        st.success('Tabel Penempatan Dana : ' + nama_bank + ' Level : ' + str(bank_level) + ' (Periode : ' + st.session_state['periode'] + ')')
         st.write(df6)
         
         # Graph All
