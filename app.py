@@ -128,7 +128,7 @@ if selected == "Data Siklik Bank":
     filter_kewajiban_per_al_min, filter_kewajiban_per_al_max = st.sidebar.slider('Kewajiban/AL : ', min_kewajiban_per_al, max_kewajiban_per_al, (min_kewajiban_per_al, max_kewajiban_per_al))
 
     if st.sidebar.button('Run'):
-        st.header("Hasil Analisis Interconnectedness Siklik Bank")
+        st.header("Hasil Analisis Siklik Bank")
 
         df6 = util.filter_bank(st.session_state['df5'], filter_persentase_penempatan_min, filter_persentase_penempatan_max, filter_penempatan_per_al_min, filter_penempatan_per_al_max, filter_kewajiban_per_al_min, filter_kewajiban_per_al_max)
         df7 = util.view_data_cycle_all(df6, cycle_num, cycle_len, st.session_state['df2'])
