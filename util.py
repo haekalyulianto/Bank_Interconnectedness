@@ -51,7 +51,7 @@ def view_all(df):
     if not (int(df['BankPelapor'].iloc[i]) in graph.neighbors(int(df['BankTujuan'].iloc[i]))):
       graph.add_edge(int(df['BankPelapor'].iloc[i]), int(df['BankTujuan'].iloc[i]), weight = int(df['Jumlah Bulan Laporan'].iloc[i]))
   
-  nt = Network('500px', '500px', directed=True, bgcolor='rgba(0,0,0,0)', font_color='#ffffff')
+  nt = Network('500px', '500px', directed=True, bgcolor='rgba(0,0,0,0)', font_color='#000000')
   nt.from_nx(graph)
   nt.save_graph('/tmp/graph_all.html')
 
@@ -89,7 +89,7 @@ def view_data_from_bank_level(df, inputbankasal, n, df2):
   for i in range(1, len(list_df3)):
     df3 = pd.concat([df3, list_df3[i]], sort=False)
 
-  nt = Network('500px', '500px', directed=True, bgcolor='rgba(0,0,0,0)', font_color='#ffffff')
+  nt = Network('500px', '500px', directed=True, bgcolor='rgba(0,0,0,0)', font_color='#000000')
   nt.from_nx(graph)
   nt.save_graph('/tmp/graph_bank_level.html')
 
@@ -248,7 +248,7 @@ def view_data_cycle_all(df, cycle_num, cycle_len, df2):
       pos_bank = find_bank(df, list_cycle[i][len(list_cycle[i])-1])
       cycle_graph.add_edge(str(list_cycle[i][len(list_cycle[i])-1]) + '.' + str(i), str(list_cycle[i][0]) + '.' + str(i), value = int(df['Jumlah Bulan Laporan'].iloc[pos_bank]), title=rupiah(df['Jumlah Bulan Laporan'].iloc[pos_bank]))
 
-  nt = Network('500px', '500px', directed=True, bgcolor='rgba(0,0,0,0)', font_color='#ffffff')
+  nt = Network('500px', '500px', directed=True, bgcolor='rgba(0,0,0,0)', font_color='#000000')
   nt.from_nx(cycle_graph)
   nt.save_graph('/tmp/graph_cycle.html')
 
