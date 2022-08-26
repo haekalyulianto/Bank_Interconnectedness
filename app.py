@@ -21,7 +21,7 @@ do_refresh = st.sidebar.button('Refresh')
 # Konfigurasi Pilihan Menu
 selected = option_menu(
     menu_title=None,
-    options=["Data Tingkat Sistemik Bank", "Data Siklik Bank", "Data Interconnectedness Bank"],
+    options=["Data Interconnectedness Bank", "Data Siklik Bank", "Visualisasi Interconnectedness Bank"],
     icons=["arrow-repeat","recycle", "diagram-3"],
     menu_icon="cast",
     default_index=0,
@@ -75,7 +75,7 @@ def callback():
 st.sidebar.selectbox('Periode : ', (st.session_state['list_periode']), on_change=callback, key='periode')
 
 # Data Tingkat Sistemik Bank
-if selected == "Data Tingkat Sistemik Bank":
+if selected == "Data Interconnectedness Bank":
 
     nama_bank = st.sidebar.selectbox('Nama Bank : ',(st.session_state['df2']['Nama Bank']))
     
@@ -145,8 +145,8 @@ if selected == "Data Siklik Bank":
             st.success('Tabel Hasil Analisis Siklik Bank')
             st.dataframe(data=df7, height=1000)
 
-# Data Interconnectedness Bank
-if selected == "Data Interconnectedness Bank":    
+# Visualisasi Interconnectedness Bank
+if selected == "Visualisasi Interconnectedness Bank":    
     # Sunting Sidebar
     nama_bank = st.sidebar.selectbox('Nama Bank : ',(st.session_state['df2']['Nama Bank']))
     bank_level = st.sidebar.number_input('Level : ', value=1, step=1)
