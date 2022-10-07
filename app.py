@@ -33,12 +33,14 @@ if auth.check_password():
 
     # Inisialisasi Preprocess
     if 'df2' not in st.session_state:
-        df1 = db.get_data_penempatan()
-        df1['BankPelapor'].astype(np.int64)
-        df1['BankTujuan'].astype(np.int64)
-        df1['Jumlah Bulan Laporan'].astype(np.int64)
+#         df1 = db.get_data_penempatan()
+#         df1['BankPelapor'].astype(np.int64)
+#         df1['BankTujuan'].astype(np.int64)
+#         df1['Jumlah Bulan Laporan'].astype(np.int64)
 
-        df2 = db.get_data_al
+#         df2 = db.get_data_al
+        df1 = pd.read_excel('Data Penempatan Dana Jan - Mei 2022.xlsx')
+        df2 = pd.read_excel('LBU Rasio Alat Likuid Mar 2022.xlsx')
 
         st.session_state['df1'] = df1
         st.session_state['df2'] = df2
@@ -53,12 +55,13 @@ if auth.check_password():
     # Running jika periode yang dipilih berubah
     if 'periode' in st.session_state:
         if st.session_state['is_changed'] == 1:
-            df1 = db.get_data_penempatan()
-
+            #df1 = db.get_data_penempatan()
+            df1 = pd.read_excel('Data Penempatan Dana Jan - Mei 2022.xlsx')
+            
             df3 = df1[(df1['Periode Data'] == st.session_state['periode'])]
             df3 = df3.reset_index(drop=True)
 
-            df4 = db.get_data_al()
+            df4 = pd.read_excel('LBU Rasio Alat Likuid Mar 2022.xlsx') #df4 = db.get_data_al()
             df4.to_csv('AL_' + st.session_state['periode'] + '.csv', index=False)
 
             df4 = df4[['Sandi Bank', 'Penem Bank Lain IDR', 'Kewajiban Bank Lain IDR', 'Total AL']]
