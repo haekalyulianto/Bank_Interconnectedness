@@ -8,7 +8,7 @@ warnings.simplefilter(action='ignore')
 from streamlit_option_menu import option_menu
 import util
 import auth
-import db
+#import db
 import streamlit as st
 import streamlit.components.v1 as components
 from pathlib import Path
