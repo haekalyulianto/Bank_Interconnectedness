@@ -53,7 +53,7 @@ def view_all(df):
   
   nt = Network('500px', '500px', directed=True, bgcolor='rgba(0,0,0,0)', font_color='#000000')
   nt.from_nx(graph)
-  nt.save_graph('tmp/graph_all.html')
+  nt.save_graph('/tmp/graph_all.html')
 
 def view_data_from_bank_level(df, inputbankasal, n, df2):
   def get_label(df3, kode_bank):
@@ -91,7 +91,7 @@ def view_data_from_bank_level(df, inputbankasal, n, df2):
 
   nt = Network('500px', '500px', directed=True, bgcolor='rgba(0,0,0,0)', font_color='#000000')
   nt.from_nx(graph)
-  nt.save_graph('tmp/graph_bank_level.html')
+  nt.save_graph('/tmp/graph_bank_level.html')
 
   return df3.reset_index(drop=True)
 
@@ -250,7 +250,7 @@ def view_data_cycle_all(df, cycle_num, cycle_len, df2):
 
   nt = Network('500px', '500px', directed=True, bgcolor='rgba(0,0,0,0)', font_color='#000000')
   nt.from_nx(cycle_graph)
-  nt.save_graph('tmp/graph_cycle.html')
+  nt.save_graph('/tmp/graph_cycle.html')
 
   df3 = pd.DataFrame({'Kode Bank': list_kodebank, 'Nama Bank': list_namabank, 'Jumlah Kemunculan': list_countbank})
   df3['Persentase Kemunculan'] = (df3['Jumlah Kemunculan'] / cycle_num)
