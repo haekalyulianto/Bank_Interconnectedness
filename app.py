@@ -148,7 +148,7 @@ if auth.check_password():
 
             with col1:
                 st.success('Ilustrasi Hasil Analisis Siklik Bank')
-                file = open('tmp/graph_cycle.html', 'r', encoding='utf-8')
+                file = open('/tmp/graph_cycle.html', 'r', encoding='utf-8')
                 source = file.read()
                 components.html(source, height=1000)
 
@@ -169,7 +169,7 @@ if auth.check_password():
             # Bank Level
             st.success('Hasil Analisis Level Penempatan Dana Bank : ' + nama_bank + ' Level : ' + str(bank_level) + ' (Periode : ' + st.session_state['periode'] + ')')
             df6 = util.view_data_from_bank_level(st.session_state['df5'], nama_bank, bank_level, st.session_state['df2'])
-            file = open('tmp/graph_bank_level.html', 'r', encoding='utf-8')
+            file = open('/tmp/graph_bank_level.html', 'r', encoding='utf-8')
             source = file.read()
             components.html(source, height = 500)
 
@@ -180,10 +180,10 @@ if auth.check_password():
             # Graph All
             st.success('Hasil Analisis Penempatan Dana Keseluruhan')
             # Check graph all exist
-            graph_all_file = Path("tmp/graph_all.html")
+            graph_all_file = Path("/tmp/graph_all.html")
             if not graph_all_file.is_file():
                 util.view_all(st.session_state['df5'])
             
-            file = open('tmp/graph_all.html', 'r', encoding='utf-8')
+            file = open('/tmp/graph_all.html', 'r', encoding='utf-8')
             source = file.read()
             components.html(source, height = 500)
